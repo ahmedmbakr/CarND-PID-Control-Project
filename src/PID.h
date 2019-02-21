@@ -2,6 +2,8 @@
 #define PID_H
 
 class PID {
+	bool is_prev_cte_init;
+	double prev_cte;
 public:
   /*
   * Errors
