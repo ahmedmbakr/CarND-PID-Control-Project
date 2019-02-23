@@ -2,6 +2,54 @@
 Self-Driving Car Engineer Nanodegree Program
 
 ---
+In this project I'll implement a PID controller in C++ to maneuver the vehicle around the lake race track in Udacity [simulator](https://github.com/udacity/self-driving-car-sim/releases) which will provide the algorithm with the cross track error (CTE) and the velocity (mph) in order to compute the appropriate vehicle steering angle.
+I have recorded the PID project output in the following [video](https://youtu.be/DX5tiR-wMbQ)
+
+[//]: # (Images)
+
+[PID_img]: ./images/PID.png "PID controller"
+
+## PID controller reflection
+The PID stands for Proportional-Integral-Derivative.
+PID controller calculates the difference between the desired state(set value) and the measured state (feedback) of the system as an error value.
+
+## The effect of (P, I, and D) components on the steering angle
+![alt text][PID_img]
+PID controller is used to make the error equal to zero over time, it corrects the error value based on the (P, I, and D) components.
+For example, we want to keep the vehicle inside the lane lines, so if the vehicle tries to go out the lane lines, we should to control the steering value to return the vehicle on track.
+In PID controller the new steering angle is tuned on three steps:
+
+* Proportional(P) tuning: the error value(set point - feedback) is multiplied by a constant Kp
+cross track error value (cte) = set point - feedback
+proportional_error = cte
+steering value = Kp * proportional_error
+Increasing\decreasing Kp, proportionally increasing\decreasing the steering control signal for the same level of error, so system may response quickly and overshoot. 
+
+* Integral(I) tuning: the error value(set point - feedback) is integrated and then multiplied by a constant Ki.
+cross track error value (cte) = set point - feedback
+integral_error = summation of all ctes
+steering value = Ki * integral_error
+The integral part of the controller reduce the steady state error, as it sums the error, if error suddenly becomes zero, it will participate and driving the error down, but it may also add oscillation to the system 
+
+* Derivative(D) tuning: the error value(set point - feedback) is differentiated and then multiplied by a constant Kd.
+cross track error value (cte) = set point - feedback
+derivative_error = new cte - previous cte
+steering value = Kd * derivative_error
+The derivative part of controller anticipate the error, as it compare the current error with the previous error, if the current error suddenly becomes zero, the derivative part will not be zero, it will be zero gradually and add dumping to the steering control and decrease overshooting
+
+Then the three tuning parameters ar sum together to form the PID controller value
+steering value = Kp * proportional_error + Ki * integral_error + Kd * derivative_error
+
+## Choosing the (P, I, and D) components final hyperparameters values
+The following (P, I, and D) components final hyperparameters are tuned manually till I got the required accurecy:
+  * Kp: 0.3
+  * Ki: 0.001
+  * Kd: 10
+
+
+## Future improvements
+Twiddle can be used to choose the (P, I, and D) components final hyperparameters values automatically instead of setting it manually.
+
 
 ## Dependencies
 
